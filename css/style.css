@@ -16,10 +16,14 @@ header{
 	background-color: grey;
 	height: 75px;
 	width: 100%;
-
 	display: flex;
-	justify-content: end;
+	justify-content: space-between;
 	align-items: center;
+}
+.logo{
+	margin-left: 25px;
+	text-transform: uppercase;
+    font-weight: bold;
 }
 .btn-cart{
 	margin-right: 25px;
