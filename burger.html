@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Бургер</title>
+</head>
+<body>
+	<header>
+		<h3>Собери свой бургер </h3>
+	</header>
+	<main>
+		<form>
+		    <fieldset>
+		    	<input type="radio" name="size" value='big' class="burgerForm" id="big" onchange="onChange" data-price='100' data-calories="40">
+		    	<label for="big">Big</label><br/>
+		    	<input type="radio"  name="size" value='small' class="burgerForm" id="small" checked data-price='50' data-calories="20">
+				<label for="small">Small</label>
+			</fieldset>
+			<fieldset>
+		    	<input type="radio" name="filler" value='cheese' class="burgerForm" id="cheese" data-price='10' data-calories="20">
+		    	<label for="cheese">Cheese</label><br/>
+		    	<input type="radio"  name="filler" value='salad' class="burgerForm" id="salad" data-price='20' data-calories="5" checked>
+				<label for="salad">Salad</label><br/>
+				<input type="radio"  name="filler" value='potato' class="burgerForm" id="potato" data-price='15' data-calories="10">
+				<label for="potato">Potato</label>
+			</fieldset>
+			<fieldset>
+		    	<input type="checkbox" name="topping" value='mayonnaise' class="burgerForm" id="mayonnaise" data-price='20' data-calories="5">
+		    	<label for="mayonnaise">Mayonnaise</label><br/>
+		    	<input type="checkbox"  name="topping" value='spices' class="burgerForm" id="spices" data-price='15' data-calories="0">
+				<label for="spices">Spices</label>
+			</fieldset>
+		</form>
+		<div class="info">
+			<h4>Price: <span id="sumMoney"></span> rub</h4>
+			<h4>Calories: <span id="sumCalories"></span> kkal</h4>
+		</div>
+	</main>
+	<script type="text/javascript">
+		let inputs = document.body.getElementsByClassName('burgerForm');
+		for(i = 0; i < inputs.length; i++) {inputs[i].oninput = onChange}
+//		  	input.oninput = function() {console.log("Test") };
+		function onChange(){
+			let sumMoney = 0;
+			let sumCalories = 0;
+			for(i = 0; i < inputs.length; i++) {
+				if(inputs[i].checked){
+					sumMoney += +inputs[i].dataset.price;
+					sumCalories += +inputs[i].dataset.calories;
+				}
+			}
+			let rubles = document.getElementById('sumMoney');
+			rubles.innerHTML = sumMoney;
+			let calories = document.getElementById('sumCalories');
+			calories.innerHTML = sumCalories;
+		}
+		onChange();	
+	</script>
+</body>
+</html>
