@@ -1,8 +1,15 @@
+const API = 'https://raw.githubusercontent.com/Kuldyaev/homeWork/master';
+
 class ProductList{
     constructor(container='.products'){
         this.container = container;
         this.goods = [];
-        this._fetchProducts();
+//        this._fetchProducts();
+        this._getProducts()
+            .then(data => {
+                this.goods=data.goods;
+                this.render()
+            })
     }
     _fetchProducts(){
         this.goods = [
@@ -11,6 +18,11 @@ class ProductList{
             {id: 3, title: 'Keyboard', price: 200, img: "3.jpg"},
             {id: 4, title: 'Gamepad', price: 50, img: "4.jpg"},
         ];
+    }
+    _getProducts(){
+        return fetch(`${API}/goods.json`)
+            .then(result => result.json())
+            .catch(error => {console.log(error)})
     }
     render(){
         const block = document.querySelector(this.container);
@@ -52,8 +64,9 @@ class ProductItem{
 }
 
 let list = new ProductList();
-list.render();
+//list.render();
 list.getSum();
+list._getProducts();
 
 class Cart {
     addItem(){
