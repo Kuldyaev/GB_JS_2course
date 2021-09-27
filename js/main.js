@@ -8,20 +8,20 @@ class ProductItem{
         this.img = product.img;
     }
     render(){
-           return `<div class="product-item">
-                <div class="image-place">
-                    <img class="product-img" src="img/${this.img}" alt="product icon" id=${this.img}/>
+       return `<div class="product-item">
+            <div class="image-place">
+                <img class="product-img" src="img/${this.img}" alt="product icon" id=${this.img}/>
+            </div>
+            <div class="info-place">
+                <div class="namePrice">
+                    <h3>${this.title}</h3>
+                    <p>${this.price} руб.</p>
                 </div>
-                <div class="info-place">
-                    <div class="namePrice">
-                        <h3>${this.title}</h3>
-                        <p>${this.price} руб.</p>
-                    </div>
-                    <div class="buyBtn">
-                        <button class="buy-btn" data-id=${this.id}>Купить</button>
-                    </div>
+                <div class="buyBtn">
+                    <button class="buy-btn" data-id=${this.id}>Купить</button>
                 </div>
-            </div>`
+            </div>
+        </div>`
     }
 }
 
@@ -42,7 +42,7 @@ class CartItem extends ProductItem{
         </div>
         <div class="right-block">
             <p class="product-price">$${this.quantity*this.price}</p>
-            <button class="del-btn" data-id="${this.id_product}">&times;</button>
+            <button class="del-btn" data-id="${this.id}">&times;</button>
         </div>
         </div>`
     }
@@ -91,26 +91,23 @@ class ProductList{
     }
     renderCart(){
         if (this.cart.length < 1){
-            let emptyCart = document.createElement('div');
-            emptyCart.className = 'emptyCart';
-            emptyCart.innerHTML = "Корзина пуста";
-            document.querySelector('.cart').appendChild(emptyCart);
+            document.querySelector('.emptyCart').classList.toggle('invisible');
         }else{
-            let myCart = document.createElement('div');
-            myCart.className = 'myCart';
-
+            let myCart = document.querySelector('.myCart');
+            myCart.classList.toggle('invisible');
+            document.querySelector('.myCartSum').classList.toggle('invisible');
             this.cart.forEach(item =>{
                 const cartItem = new CartItem(item);
                 myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
-                document.querySelector('.cart').appendChild(myCart);
             });
-            document.querySelector(this.container).addEventListener('click', e => {
+       
+            myCart.addEventListener('click', e => {
                 if(e.target.classList.contains('del-btn')){
-                   this.removeProduct(e.target);
-                   console.log(e.target);
+                   this.removeItem(e.target);
                 }
            })
         }
+        this.checkCartSum();
     }
     cartInit(){
         document.querySelector('.btn-cart').addEventListener('click', () => {
@@ -122,56 +119,60 @@ class ProductList{
         let find = this.cart.find(product => product.id === productId);
         if(find){
             find.quantity++;
+            this.updateCart(find);
         } else {
-           let product = this.goods.find(product => product.id === productId);
-            product.quantity = 1;
-            this.cart.push(product);
+            if(this.cart.length < 1){
+                document.querySelector('.myCart').classList.toggle('invisible');
+                document.querySelector('.emptyCart').classList.toggle('invisible');
+                document.querySelector('.myCartSum').classList.toggle('invisible');
+                let product = this.goods.find(product => product.id === productId);
+                product.quantity = 1;
+                this.cart.push(product);
+                const cartItem = new CartItem(product);
+                const myCart =  document.querySelector('.myCart');
+                myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
+            }else{
+                let product = this.goods.find(product => product.id === productId);
+                product.quantity = 1;
+                this.cart.push(product);
+                const cartItem = new CartItem(product);
+                const myCart =  document.querySelector('.myCart');
+                myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
+            }
         }
+        this.checkCartSum();
     }
-}
-
-/*
-class Cart{
-    constructor(container='.cart'){
-        this.container = container;
-        this.goodsInCart = [];
-        this._init();
-    }
-    addItem(id){
-        let productId = +id;
-        let find = this.goodsInCart.find(product => product.id === productId);
-        if(find){
-            console.log("Есть уже в корзине");
+    removeItem(el){
+        let productId = +el.dataset.id;
+        let find = this.cart.find(product => +product.id === productId);
+        if(find.quantity > 1){
+            find.quantity--;
+            this.updateCart(find);
         } else {
-            console.log(this.goods);
-    //       let product = this.goods.find(product => product.id === productId);
-    //        product.quantity = 1;
-    //        this.goodsInCart.push(product);
+            this.cart.splice(this.cart.indexOf(find), 1);
+            document.querySelector(`.cart-item[data-id="${productId}"]`).remove();
+            if(this.cart.length < 1){
+                document.querySelector('.emptyCart').classList.toggle('invisible');
+                document.querySelector('.myCart').classList.toggle('invisible');
+                document.querySelector('.myCartSum').classList.toggle('invisible');
+            }
         }
-        console.log(this.goodsInCart);
+        this.checkCartSum();
     }
-    removeItem(){
-
+    updateCart(product){
+       let block = document.querySelector(`.cart-item[data-id="${product.id}"]`);
+       block.querySelector('.product-quantity').textContent = `Quantity: ${product.quantity}`;
+       block.querySelector('.product-price').textContent = `$${product.quantity*product.price}`;
     }
-    changeItem(){
-
-    }
-    
-    _init(){
-        document.querySelector('.btn-cart').addEventListener('click', () => {
-            document.querySelector(this.container).classList.toggle('invisible');
-        });
-        this.renderCart();
-/*      document.querySelector(this.container).addEventListener('click', e => {
-           if(e.target.classList.contains('del-btn')){
-               this.removeProduct(e.target);
-           }
+    checkCartSum(){
+        const sumCartCalculated = document.getElementById('sumCart');
+        let result = 0;
+        this.cart.forEach(item => {
+            result += +item.price * +item.quantity
         })
-   } 
+        sumCartCalculated.innerHTML = result;
+    }  
 }
-/*        
-
-*/
 
 let list = new ProductList();
 

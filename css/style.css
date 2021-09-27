@@ -99,6 +99,8 @@ header{
     margin: -21px 10px auto auto;
     padding-top: 5px;
     padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
 }
 .invisible{
     display: none;
@@ -134,4 +136,7 @@ header{
 }
 .right-block{
     text-align: right;
+}
+.myCartSum{
+	margin-top: 3px;
 }
