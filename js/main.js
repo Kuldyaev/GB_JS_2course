@@ -1,43 +1,5 @@
 const API = 'https://raw.githubusercontent.com/Kuldyaev/homeWork/master';
 
-class ProductList{
-    constructor(container='.products'){
-        this.container = container;
-        this.goods = [];
-//        this._fetchProducts();
-        this._getProducts()
-            .then(data => {
-                this.goods=data.goods;
-                this.render()
-            })
-    }
-    _fetchProducts(){
-        this.goods = [
-            {id: 1, title: 'Notebook', price: 2000, img: '1.jpg'},
-            {id: 2, title: 'Mouse', price: 20, img: "2.jpg" },
-            {id: 3, title: 'Keyboard', price: 200, img: "3.jpg"},
-            {id: 4, title: 'Gamepad', price: 50, img: "4.jpg"},
-        ];
-    }
-    _getProducts(){
-        return fetch(`${API}/goods.json`)
-            .then(result => result.json())
-            .catch(error => {console.log(error)})
-    }
-    render(){
-        const block = document.querySelector(this.container);
-        for(let product of this.goods){
-            const item = new ProductItem(product);
-             block.insertAdjacentHTML("beforeend",item.render());
-        }
-    }
-    getSum(){
-        let sumOfPrices = 0;
-        this.goods.forEach(item => {sumOfPrices += item.price});
-        alert(sumOfPrices);
-    }
-}
-
 class ProductItem{
     constructor(product){
         this.title = product.title;
@@ -56,21 +18,137 @@ class ProductItem{
                         <p>${this.price} руб.</p>
                     </div>
                     <div class="buyBtn">
-                        <button class="buy-btn">Купить</button>
+                        <button class="buy-btn" data-id=${this.id}>Купить</button>
                     </div>
                 </div>
             </div>`
     }
 }
 
-let list = new ProductList();
-//list.render();
-list.getSum();
-list._getProducts();
+class CartItem extends ProductItem{
+    constructor(el){
+        super(el);
+        this.quantity = el.quantity;
+    }
+    renderCartItem(){
+        return `<div class="cart-item" data-id="${this.id}">
+            <div class="product-bio">
+            <img src="img/${this.img}" alt="Some image">
+            <div class="product-desc">
+            <p class="product-title">${this.title}</p>
+            <p class="product-quantity">Quantity: ${this.quantity}</p>
+        <p class="product-single-price">$${this.price} each</p>
+        </div>
+        </div>
+        <div class="right-block">
+            <p class="product-price">$${this.quantity*this.price}</p>
+            <button class="del-btn" data-id="${this.id_product}">&times;</button>
+        </div>
+        </div>`
+    }
+}
 
-class Cart {
-    addItem(){
 
+class ProductList{
+    constructor(container='.products'){
+        this.container = container;
+        this.cart = [];
+        this.goods = [];
+        this._fetchProducts();
+        
+    }
+    _fetchProducts(){
+        return fetch(`${API}/goods.json`)
+            .then(result => result.json())
+                .then(data =>{
+                    this.goods=data.goods;
+                    this.cart=data.cart;
+                    this.render();
+                    this.renderCart();
+                    this.cartInit();
+                })
+            .catch(error => {console.log(error)})
+    }
+    render(){
+        const block = document.querySelector(this.container);
+        for(let product of this.goods){
+            const item = new ProductItem(product);
+             block.insertAdjacentHTML("beforeend",item.render());
+        };
+        this._addClicker();
+    }
+    getSum(){
+        let sumOfPrices = 0;
+        this.goods.forEach(item => {sumOfPrices += item.price});
+    }
+    _addClicker(){
+        let buyBtns = document.querySelectorAll('.buy-btn');
+        for (let y=0; y<buyBtns.length; y++){
+            buyBtns[y].addEventListener('click', (e) =>{
+                this.addItem(e.target.dataset.id);
+            })
+        }
+    }
+    renderCart(){
+        if (this.cart.length < 1){
+            let emptyCart = document.createElement('div');
+            emptyCart.className = 'emptyCart';
+            emptyCart.innerHTML = "Корзина пуста";
+            document.querySelector('.cart').appendChild(emptyCart);
+        }else{
+            let myCart = document.createElement('div');
+            myCart.className = 'myCart';
+
+            this.cart.forEach(item =>{
+                const cartItem = new CartItem(item);
+                myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
+                document.querySelector('.cart').appendChild(myCart);
+            });
+            document.querySelector(this.container).addEventListener('click', e => {
+                if(e.target.classList.contains('del-btn')){
+                   this.removeProduct(e.target);
+                   console.log(e.target);
+                }
+           })
+        }
+    }
+    cartInit(){
+        document.querySelector('.btn-cart').addEventListener('click', () => {
+            document.querySelector('.cart').classList.toggle('invisible');
+        });
+    }
+    addItem(id){
+        let productId = +id;
+        let find = this.cart.find(product => product.id === productId);
+        if(find){
+            find.quantity++;
+        } else {
+           let product = this.goods.find(product => product.id === productId);
+            product.quantity = 1;
+            this.cart.push(product);
+        }
+    }
+}
+
+/*
+class Cart{
+    constructor(container='.cart'){
+        this.container = container;
+        this.goodsInCart = [];
+        this._init();
+    }
+    addItem(id){
+        let productId = +id;
+        let find = this.goodsInCart.find(product => product.id === productId);
+        if(find){
+            console.log("Есть уже в корзине");
+        } else {
+            console.log(this.goods);
+    //       let product = this.goods.find(product => product.id === productId);
+    //        product.quantity = 1;
+    //        this.goodsInCart.push(product);
+        }
+        console.log(this.goodsInCart);
     }
     removeItem(){
 
@@ -78,15 +156,22 @@ class Cart {
     changeItem(){
 
     }
-    render(){
-
-    }
+    
+    _init(){
+        document.querySelector('.btn-cart').addEventListener('click', () => {
+            document.querySelector(this.container).classList.toggle('invisible');
+        });
+        this.renderCart();
+/*      document.querySelector(this.container).addEventListener('click', e => {
+           if(e.target.classList.contains('del-btn')){
+               this.removeProduct(e.target);
+           }
+        })
+   } 
 }
+/*        
 
-class CartItem{
-    render(){
+*/
 
-    }
-}
-
+let list = new ProductList();
 
