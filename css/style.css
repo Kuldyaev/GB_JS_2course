@@ -36,6 +36,7 @@ header{
 }
 .btn-cart{
 	margin-right: 25px;
+	margin-left: 10px;
 	height: 40px;
 	min-width: 105px;
 }
@@ -140,3 +141,8 @@ header{
 .myCartSum{
 	margin-top: 3px;
 }
+.search-form{
+	height: 40px;
+}
+.search-field, .btn-search{height: 40px;}
+.btn-search{width: 40px;}
