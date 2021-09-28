@@ -8,36 +8,70 @@
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <title>Интернет-магазин</title>
 </head>
-<body>
-    <header>
-        <div class="stableHeader">
-            <div class="logo">E-shop</div>
-            <div class="rightBlockHeader flex-center">
-                 <form action="#" class="search-form ">
-                    <input type="text" class="search-field" >
-                    <button class="btn-search" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-                <button class="btn-cart flex-center" type="button">Корзина</button>
+<body >
+    <div id="app">
+        <header>
+            <div class="stableHeader">
+                <div class="logo">E-shop</div>
+                <div class="rightBlockHeader flex-center">
+                     <form action="#" class="search-form ">
+                        <input type="text" class="search-field" v-model="userSearch">
+                        <button class="btn-search" type="submit" v-on:click="filterGoods">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <button class="btn-cart flex-center" type="button" v-on:click="visible=!visible">Корзина</button>
+                </div>
             </div>
-        </div>
-        <div class="cart flex-center invisible">
-            <div class="myCart invisible"></div>
-            <div class="myCartSum invisible">Всего: <span id="sumCart">0</span>руб.</div>
-            <div class="emptyCart invisible">Корзина пока пуста</div>
-        </div>
-    </header>
-    <main>
-        <div class="products"></div>
-    </main>
-        <!--beforestart-->
-        <p>
-        <!--afterstart-->
-            <span></span>
-            <!--beforeend-->
-        </p>
-        <!--afterend-->
+            <div class="cart flex-center" v-show="visible">
+                <div class="myCart" v-if="!cartIsEmpty">
+                    <div class="cart-item" v-for="cartItem of cart" :key="cartItem.id">
+                        <div class="product-bio">
+                            <img :src="'img/' + cartItem.img" alt="Some image">
+                            <div class="product-desc">
+                                <p class="product-title">{{cartItem.title}}</p>
+                                <p class="product-quantity">Quantity: {{cartItem.quantity}}</p>
+                                <p class="product-single-price">${{cartItem.price}} each</p>
+                            </div>
+                        </div>
+                        <div class="right-block">
+                            <p class="product-price">${{cartItem.quantity*cartItem.price}}</p>
+                            <button class="del-btn" data-id="{{cartItem.id}}">&times;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="myCartSum" v-if="!cartIsEmpty">Всего: {{sumCart}}$</div>
+                <div class="emptyCart" v-if="cartIsEmpty">Корзина пока пуста</div>
+            </div>
+        </header>
+        <main>
+            <p>{{searchResult}}</p>
+            <p>{{cartIsEmpty }}</p>
+            <div class="products">
+                <div class="product-item" v-for="product of products" :key="product.id">
+                    <div class="image-place">
+                        <img :src="'img/' + product.img" alt="Some img" class="product-img">
+                    </div>
+                    <div class="info-place">
+                        <div class="namePrice">
+                            <h3>{{product.title}}</h3>
+                            <p>{{product.price}} $</p>
+                        </div>
+                        <div class="buyBtn">
+                            <button class="buy-btn" @click="addProduct(product)">Купить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+            <!--beforestart-->
+            <p>
+            <!--afterstart-->
+                <span></span>
+                <!--beforeend-->
+            </p>
+            <!--afterend-->
+    </div>    
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="js/main.js"></script>

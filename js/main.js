@@ -1,5 +1,57 @@
 const API = 'https://raw.githubusercontent.com/Kuldyaev/homeWork/master';
 
+const app = new Vue({
+    el: '#app',
+    data: {
+        userSearch: '',
+        searchResult: '',
+        visible: false,
+        products: [],
+        cart: [],
+        urlFile: '/goods.json',
+    },
+    computed: {
+        cartIsEmpty () {
+          if (this.cart.length < 1) {
+            return true
+          } else { return false }
+        },
+        sumCart () {
+            let result = 0;
+            for(let el of this.cart){
+                result += +el.price * +el.quantity
+            }
+            return result
+        }
+      },
+    methods: {
+        filterGoods(){
+            this. searchResult = this.userSearch;
+            this.userSearch = '';
+        },
+        getJson(url){
+            return fetch(url)
+                .then(result => result.json())
+                .catch(error => {console.log(error)})
+        },
+        addProduct(product){
+            console.log(product.id);
+        }
+    },
+    mounted(){
+        this.getJson(`${API + this.urlFile}`)
+           .then(data => {
+               for(let el of data.goods){
+                  this.products.push(el);
+               };
+               for(let el of data.cart){
+                  this.cart.push(el);
+               }
+           });
+    }
+})
+
+
 class ProductItem{
     constructor(product){
         this.title = product.title;
@@ -63,8 +115,8 @@ class ProductList{
                 .then(data =>{
                     this.goods=data.goods;
                     this.cart=data.cart;
-                    this.render();
-                    this.renderCart();
+//                    this.render();
+//                    this.renderCart();
                     this.cartInit();
                 })
             .catch(error => {console.log(error)})
@@ -91,11 +143,11 @@ class ProductList{
     }
     renderCart(){
         if (this.cart.length < 1){
-            document.querySelector('.emptyCart').classList.toggle('invisible');
+   //         document.querySelector('.emptyCart').classList.toggle('invisible');
         }else{
             let myCart = document.querySelector('.myCart');
-            myCart.classList.toggle('invisible');
-            document.querySelector('.myCartSum').classList.toggle('invisible');
+        //    myCart.classList.toggle('invisible');
+        //    document.querySelector('.myCartSum').classList.toggle('invisible');
             this.cart.forEach(item =>{
                 const cartItem = new CartItem(item);
                 myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
@@ -110,9 +162,9 @@ class ProductList{
         this.checkCartSum();
     }
     cartInit(){
-        document.querySelector('.btn-cart').addEventListener('click', () => {
-            document.querySelector('.cart').classList.toggle('invisible');
-        });
+//        document.querySelector('.btn-cart').addEventListener('click', () => {
+ //           document.querySelector('.cart').classList.toggle('invisible');
+ //       });
     }
     addItem(id){
         let productId = +id;
@@ -122,9 +174,9 @@ class ProductList{
             this.updateCart(find);
         } else {
             if(this.cart.length < 1){
-                document.querySelector('.myCart').classList.toggle('invisible');
-                document.querySelector('.emptyCart').classList.toggle('invisible');
-                document.querySelector('.myCartSum').classList.toggle('invisible');
+            //    document.querySelector('.myCart').classList.toggle('invisible');
+            //    document.querySelector('.emptyCart').classList.toggle('invisible');
+           //    document.querySelector('.myCartSum').classList.toggle('invisible');
                 let product = this.goods.find(product => product.id === productId);
                 product.quantity = 1;
                 this.cart.push(product);
@@ -152,9 +204,9 @@ class ProductList{
             this.cart.splice(this.cart.indexOf(find), 1);
             document.querySelector(`.cart-item[data-id="${productId}"]`).remove();
             if(this.cart.length < 1){
-                document.querySelector('.emptyCart').classList.toggle('invisible');
-                document.querySelector('.myCart').classList.toggle('invisible');
-                document.querySelector('.myCartSum').classList.toggle('invisible');
+       //         document.querySelector('.emptyCart').classList.toggle('invisible');
+        //        document.querySelector('.myCart').classList.toggle('invisible');
+       //         document.querySelector('.myCartSum').classList.toggle('invisible');
             }
         }
         this.checkCartSum();
