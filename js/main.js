@@ -1,30 +1,4 @@
-class ProductList{
-    constructor(container='.products'){
-        this.container = container;
-        this.goods = [];
-        this._fetchProducts();
-    }
-    _fetchProducts(){
-        this.goods = [
-            {id: 1, title: 'Notebook', price: 2000, img: '1.jpg'},
-            {id: 2, title: 'Mouse', price: 20, img: "2.jpg" },
-            {id: 3, title: 'Keyboard', price: 200, img: "3.jpg"},
-            {id: 4, title: 'Gamepad', price: 50, img: "4.jpg"},
-        ];
-    }
-    render(){
-        const block = document.querySelector(this.container);
-        for(let product of this.goods){
-            const item = new ProductItem(product);
-             block.insertAdjacentHTML("beforeend",item.render());
-        }
-    }
-    getSum(){
-        let sumOfPrices = 0;
-        this.goods.forEach(item => {sumOfPrices += item.price});
-        alert(sumOfPrices);
-    }
-}
+const API = 'https://raw.githubusercontent.com/Kuldyaev/homeWork/master';
 
 class ProductItem{
     constructor(product){
@@ -34,46 +8,171 @@ class ProductItem{
         this.img = product.img;
     }
     render(){
-           return `<div class="product-item">
-                <div class="image-place">
-                    <img class="product-img" src="img/${this.img}" alt="product icon" id=${this.img}/>
+       return `<div class="product-item">
+            <div class="image-place">
+                <img class="product-img" src="img/${this.img}" alt="product icon" id=${this.img}/>
+            </div>
+            <div class="info-place">
+                <div class="namePrice">
+                    <h3>${this.title}</h3>
+                    <p>${this.price} руб.</p>
                 </div>
-                <div class="info-place">
-                    <div class="namePrice">
-                        <h3>${this.title}</h3>
-                        <p>${this.price} руб.</p>
-                    </div>
-                    <div class="buyBtn">
-                        <button class="buy-btn">Купить</button>
-                    </div>
+                <div class="buyBtn">
+                    <button class="buy-btn" data-id=${this.id}>Купить</button>
                 </div>
-            </div>`
+            </div>
+        </div>`
     }
+}
+
+class CartItem extends ProductItem{
+    constructor(el){
+        super(el);
+        this.quantity = el.quantity;
+    }
+    renderCartItem(){
+        return `<div class="cart-item" data-id="${this.id}">
+            <div class="product-bio">
+            <img src="img/${this.img}" alt="Some image">
+            <div class="product-desc">
+            <p class="product-title">${this.title}</p>
+            <p class="product-quantity">Quantity: ${this.quantity}</p>
+        <p class="product-single-price">$${this.price} each</p>
+        </div>
+        </div>
+        <div class="right-block">
+            <p class="product-price">$${this.quantity*this.price}</p>
+            <button class="del-btn" data-id="${this.id}">&times;</button>
+        </div>
+        </div>`
+    }
+}
+
+
+class ProductList{
+    constructor(container='.products'){
+        this.container = container;
+        this.cart = [];
+        this.goods = [];
+        this._fetchProducts();
+        
+    }
+    _fetchProducts(){
+        return fetch(`${API}/goods.json`)
+            .then(result => result.json())
+                .then(data =>{
+                    this.goods=data.goods;
+                    this.cart=data.cart;
+                    this.render();
+                    this.renderCart();
+                    this.cartInit();
+                })
+            .catch(error => {console.log(error)})
+    }
+    render(){
+        const block = document.querySelector(this.container);
+        for(let product of this.goods){
+            const item = new ProductItem(product);
+             block.insertAdjacentHTML("beforeend",item.render());
+        };
+        this._addClicker();
+    }
+    getSum(){
+        let sumOfPrices = 0;
+        this.goods.forEach(item => {sumOfPrices += item.price});
+    }
+    _addClicker(){
+        let buyBtns = document.querySelectorAll('.buy-btn');
+        for (let y=0; y<buyBtns.length; y++){
+            buyBtns[y].addEventListener('click', (e) =>{
+                this.addItem(e.target.dataset.id);
+            })
+        }
+    }
+    renderCart(){
+        if (this.cart.length < 1){
+            document.querySelector('.emptyCart').classList.toggle('invisible');
+        }else{
+            let myCart = document.querySelector('.myCart');
+            myCart.classList.toggle('invisible');
+            document.querySelector('.myCartSum').classList.toggle('invisible');
+            this.cart.forEach(item =>{
+                const cartItem = new CartItem(item);
+                myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
+            });
+       
+            myCart.addEventListener('click', e => {
+                if(e.target.classList.contains('del-btn')){
+                   this.removeItem(e.target);
+                }
+           })
+        }
+        this.checkCartSum();
+    }
+    cartInit(){
+        document.querySelector('.btn-cart').addEventListener('click', () => {
+            document.querySelector('.cart').classList.toggle('invisible');
+        });
+    }
+    addItem(id){
+        let productId = +id;
+        let find = this.cart.find(product => product.id === productId);
+        if(find){
+            find.quantity++;
+            this.updateCart(find);
+        } else {
+            if(this.cart.length < 1){
+                document.querySelector('.myCart').classList.toggle('invisible');
+                document.querySelector('.emptyCart').classList.toggle('invisible');
+                document.querySelector('.myCartSum').classList.toggle('invisible');
+                let product = this.goods.find(product => product.id === productId);
+                product.quantity = 1;
+                this.cart.push(product);
+                const cartItem = new CartItem(product);
+                const myCart =  document.querySelector('.myCart');
+                myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
+            }else{
+                let product = this.goods.find(product => product.id === productId);
+                product.quantity = 1;
+                this.cart.push(product);
+                const cartItem = new CartItem(product);
+                const myCart =  document.querySelector('.myCart');
+                myCart.insertAdjacentHTML("beforeend",cartItem.renderCartItem());
+            }
+        }
+        this.checkCartSum();
+    }
+    removeItem(el){
+        let productId = +el.dataset.id;
+        let find = this.cart.find(product => +product.id === productId);
+        if(find.quantity > 1){
+            find.quantity--;
+            this.updateCart(find);
+        } else {
+            this.cart.splice(this.cart.indexOf(find), 1);
+            document.querySelector(`.cart-item[data-id="${productId}"]`).remove();
+            if(this.cart.length < 1){
+                document.querySelector('.emptyCart').classList.toggle('invisible');
+                document.querySelector('.myCart').classList.toggle('invisible');
+                document.querySelector('.myCartSum').classList.toggle('invisible');
+            }
+        }
+        this.checkCartSum();
+    }
+    updateCart(product){
+       let block = document.querySelector(`.cart-item[data-id="${product.id}"]`);
+       block.querySelector('.product-quantity').textContent = `Quantity: ${product.quantity}`;
+       block.querySelector('.product-price').textContent = `$${product.quantity*product.price}`;
+    }
+    checkCartSum(){
+        const sumCartCalculated = document.getElementById('sumCart');
+        let result = 0;
+        this.cart.forEach(item => {
+            result += +item.price * +item.quantity
+        })
+        sumCartCalculated.innerHTML = result;
+    }  
 }
 
 let list = new ProductList();
-list.render();
-list.getSum();
-
-class Cart {
-    addItem(){
-
-    }
-    removeItem(){
-
-    }
-    changeItem(){
-
-    }
-    render(){
-
-    }
-}
-
-class CartItem{
-    render(){
-
-    }
-}
-
 
