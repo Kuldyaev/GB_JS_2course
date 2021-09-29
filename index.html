@@ -16,11 +16,11 @@
                 <div class="rightBlockHeader flex-center">
                      <form action="#" class="search-form ">
                         <input type="text" class="search-field" v-model="userSearch">
-                        <button class="btn-search" type="submit" v-on:click="filterGoods">
+                        <button class="btn-search" type="submit" v-on:click="filterGoods()">
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
-                    <button class="btn-cart flex-center" type="button" v-on:click="visible=!visible">Корзина</button>
+                    <button class="btn-cart flex-center" type="button" @click="visible=!visible">Корзина</button>
                 </div>
             </div>
             <div class="cart flex-center" v-show="visible">
@@ -36,18 +36,38 @@
                         </div>
                         <div class="right-block">
                             <p class="product-price">${{cartItem.quantity*cartItem.price}}</p>
-                            <button class="del-btn" data-id="{{cartItem.id}}">&times;</button>
+                            <button class="del-btn" :key="cartItem.id" @click="deleteProduct(cartItem)">&times;</button>
                         </div>
                     </div>
                 </div>
-                <div class="myCartSum" v-if="!cartIsEmpty">Всего: {{sumCart}}$</div>
+                <div class="myCartSum" v-if="!cartIsEmpty">Стоимость всех товаров: {{sumCart}}$</div>
                 <div class="emptyCart" v-if="cartIsEmpty">Корзина пока пуста</div>
             </div>
         </header>
         <main>
-            <p>{{searchResult}}</p>
-            <p>{{cartIsEmpty }}</p>
-            <div class="products">
+            <div class="searchResults" v-show="searchResultVisible">
+                <div class="searchResultsheader">
+                    <h4>По вашему запросу <<{{oldUserSearch}}>> найдено {{searchResult.length}} товаров</h4>
+                    <button @click="searchResultVisible=false">скрыть результаты поиска</button>
+                </div>
+                <div class="products searchResult">
+                    <div class="product-item" v-for="product of searchResult" :key="product.id">
+                        <div class="image-place">
+                            <img :src="'img/' + product.img" alt="Some img" class="product-img">
+                        </div>
+                        <div class="info-place">
+                            <div class="namePrice">
+                                <h3>{{product.title}}</h3>
+                                <p>{{product.price}} $</p>
+                            </div>
+                            <div class="buyBtn">
+                                <button class="buy-btn" @click="addProduct(product)">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="products catalog" v-show="!searchResultVisible">
                 <div class="product-item" v-for="product of products" :key="product.id">
                     <div class="image-place">
                         <img :src="'img/' + product.img" alt="Some img" class="product-img">
