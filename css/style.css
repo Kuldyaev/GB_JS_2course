@@ -150,3 +150,10 @@ header{
 }
 .search-field, .btn-search{height: 40px;}
 .btn-search{width: 40px;}
+.servernotfound{
+	height: 95%;
+	flex-direction: column;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

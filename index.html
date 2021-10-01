@@ -23,77 +23,21 @@
                     <button class="btn-cart flex-center" type="button" @click="visible=!visible">Корзина</button>
                 </div>
             </div>
-            <div class="cart flex-center" v-show="visible">
-                <div class="myCart" v-if="!cartIsEmpty">
-                    <div class="cart-item" v-for="cartItem of cart" :key="cartItem.id">
-                        <div class="product-bio">
-                            <img :src="'img/' + cartItem.img" alt="Some image">
-                            <div class="product-desc">
-                                <p class="product-title">{{cartItem.title}}</p>
-                                <p class="product-quantity">Quantity: {{cartItem.quantity}}</p>
-                                <p class="product-single-price">${{cartItem.price}} each</p>
-                            </div>
-                        </div>
-                        <div class="right-block">
-                            <p class="product-price">${{cartItem.quantity*cartItem.price}}</p>
-                            <button class="del-btn" :key="cartItem.id" @click="deleteProduct(cartItem)">&times;</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="myCartSum" v-if="!cartIsEmpty">Стоимость всех товаров: {{sumCart}}$</div>
-                <div class="emptyCart" v-if="cartIsEmpty">Корзина пока пуста</div>
-            </div>
+            <cart v-show="visible" :delete_product='deleteProduct'></cart>
         </header>
         <main>
-            <div class="searchResults" v-show="searchResultVisible">
-                <div class="searchResultsheader">
-                    <h4>По вашему запросу <<{{oldUserSearch}}>> найдено {{searchResult.length}} товаров</h4>
-                    <button @click="searchResultVisible=false">скрыть результаты поиска</button>
-                </div>
-                <div class="products searchResult">
-                    <div class="product-item" v-for="product of searchResult" :key="product.id">
-                        <div class="image-place">
-                            <img :src="'img/' + product.img" alt="Some img" class="product-img">
-                        </div>
-                        <div class="info-place">
-                            <div class="namePrice">
-                                <h3>{{product.title}}</h3>
-                                <p>{{product.price}} $</p>
-                            </div>
-                            <div class="buyBtn">
-                                <button class="buy-btn" @click="addProduct(product)">Купить</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <searchresult class="searchResults" v-show="searchResultVisible" :add_product="add_product"></searchresult>
             <div class="products catalog" v-show="!searchResultVisible">
-                <div class="product-item" v-for="product of products" :key="product.id">
-                    <div class="image-place">
-                        <img :src="'img/' + product.img" alt="Some img" class="product-img">
-                    </div>
-                    <div class="info-place">
-                        <div class="namePrice">
-                            <h3>{{product.title}}</h3>
-                            <p>{{product.price}} $</p>
-                        </div>
-                        <div class="buyBtn">
-                            <button class="buy-btn" @click="addProduct(product)">Купить</button>
-                        </div>
-                    </div>
-                </div>
+                <productitem v-for="product of products" :key="product.id" :product='product' class="product-item" ></productitem>
             </div>
+            <servernotfound v-show="serverNotFound" class="servernotfound"></servernotfound>
         </main>
-            <!--beforestart-->
-            <p>
-            <!--afterstart-->
-                <span></span>
-                <!--beforeend-->
-            </p>
-            <!--afterend-->
     </div>    
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/searchresult.js"></script>
+    <script src="js/item.js"></script>
+    <script src="js/cart.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

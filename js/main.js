@@ -1,4 +1,5 @@
 const API = 'https://raw.githubusercontent.com/Kuldyaev/homeWork/master';
+//const API = 'https://github.com/Kuldyaev/homeWork/blob/main';
 
 const app = new Vue({
     el: '#app',
@@ -8,6 +9,7 @@ const app = new Vue({
         searchResult: [],
         visible: false,
         searchResultVisible: false,
+        serverNotFound:false,
         products: [],
         cart: [],
         urlFile: '/goods.json',
@@ -38,7 +40,12 @@ const app = new Vue({
         getJson(url){
             return fetch(url)
                 .then(result => result.json())
-                .catch(error => {console.log(error)})
+                .catch(error => {
+                    console.log(error),
+                    this.visible = false,
+                    this.searchResultVisible = false,
+                    this.serverNotFound = true
+                })
         },
         findItemInCart (id) {
             return this.cart.find(item => item.id === id);
@@ -55,7 +62,7 @@ const app = new Vue({
             Vue.set(newCartItem, 'quantity', 1);
             return newCartItem
         }, 
-        addProduct(product){
+        add_product(product){
             if(this.findItemInCart(product.id)){
                 let item = this.findItemInCart(product.id);
                 item.quantity++ ;

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HomeWork Lesson4</title>
+	<style type="text/css">
+	    input {
+            width: 200px;
+            padding: 5px 10px;
+            margin: 10px 0;
+        }
+        input:focus{
+            outline: none;
+        }
+        button{
+            border: none;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .error-msg{
+            color: red;
+            margin: 10px 0;
+        }
+        .invalid{
+            border: 2px solid red;
+        }
+        .valid{
+            border: 2px solid green;
+        }
+    </style>
+</head>
+<body>
+	<header>
+		<h3>Домашнее задание к Уроку 4 курса JavaScript</h3>
+	</header>
+	<main>
+		<section class='firstExercise'>
+			<h5>Задание 1</h5>
+			<p id='textBlock1'>
+				One: 'Hi Mary.' Two: 'Oh, hi.'
+				One: 'How are you doing?'
+				Two: 'I'm doing alright. How about you?'
+				One: 'Not too bad. The weather is great isn't it?'
+				Two: 'Yes. It's absolutely beautiful today.'
+				One: 'I wish it was like this more frequently.'
+				Two: 'Me too.'
+				One: 'So where are you going now?'
+				Two: 'I'm going to meet a friend of mine at the department store.'
+				One: 'Going to do a little shopping?'
+				Two: 'Yeah, I have to buy some presents for my parents.'
+				One: 'What's the occasion?'
+				Two: 'It's their anniversary.'
+				One: 'That's great. Well, you better get going. You don't want to be late.'
+				Two: 'I'll see you next time.'
+				One: 'Sure. Bye.'
+			</p>
+			<button id="replacer1">Заменить одинарные кавычки двойными</button>
+		</section></br>
+		<section class='secondExercise'>
+			<h5>Задание 2</h5>
+			<p id='textBlock2'>
+				One: 'Hi Mary.' Two: 'Oh, hi.'
+				One: 'How are you doing?'
+				Two: 'I'm doing alright. How about you?'
+				One: 'Not too bad. The weather is great isn't it?'
+				Two: 'Yes. It's absolutely beautiful today.'
+				One: 'I wish it was like this more frequently.'
+				Two: 'Me too.'
+				One: 'So where are you going now?'
+				Two: 'I'm going to meet a friend of mine at the department store.'
+				One: 'Going to do a little shopping?'
+				Two: 'Yeah, I have to buy some presents for my parents.'
+				One: 'What's the occasion?'
+				Two: 'It's their anniversary.'
+				One: 'That's great. Well, you better get going. You don't want to be late.'
+				Two: 'I'll see you next time.'
+				One: 'Sure. Bye.'
+			</p>
+			<button id="replacer2">Заменить одинарные кавычки двойными</button>
+		</section></br>
+		<section class='therdExercise'>
+			<h5>Задание 3</h5>
+			<form action="#" id="form">
+				<div>
+					<label>
+						Имя</br>
+						<input type="text" name="name" id="name">
+					</label>
+				</div>
+				<div>
+					<label>
+						Телефон</br>
+						<input type="tel" name="phone" id="phone">
+					</label>
+				</div>
+				<div>
+					<label>
+						Эл почта</br>
+						<input type="email" name="email" id="email">
+					</label>
+				</div></br>
+				<button id="validationForm">Проверить</button>
+			</form>
+		</section>
+	</main>
+	<script>
+		let block1 = document.getElementById('textBlock1');
+		let block2 = document.getElementById('textBlock2');
+		document.getElementById('replacer1').addEventListener('click',()=>{
+			block1.textContent = block1.textContent.replace(/'/g,'"')
+		})
+		document.getElementById('replacer2').addEventListener('click',()=>{
+			block2.textContent = block2.textContent.replace(/\B'|'\B/g,'"')
+		})
+		class Validator {
+		    constructor(form) {
+		        this.patterns = {
+		            name: /^[a-zа-яё]+$/i,
+		            phone: /^\+7\(\d{3}\)\d{3}-\d{4}$/,
+		            email: /^[\w._-]+@\w+\.[a-z]{2,4}$/i
+		        };
+		        this.errors = {
+		            name: 'Имя содержит только буквы',
+		            phone: 'Телефон подчиняется шаблону +7(000)000-0000',
+		            email: 'E-mail выглядит как mymail@mail.ru, или my.mail@mail.ru, или my-mail@mail.ru'
+		        };
+		        this.errorClass = 'error-msg';
+		        this.form = form;
+		        this.valid = false;
+		        this._validateForm();
+		    }
+		    validate(regexp, value){
+		        regexp.test(value)
+		    }
+		    
+		    _validateForm(){
+		        let errors = [...document.getElementById(this.form).querySelectorAll(`.${this.errorClass}`)];
+		        for (let error of errors){
+		            error.remove();
+		        }
+		        let formFields = [...document.getElementById(this.form).getElementsByTagName('input')];
+		        for (let field of formFields){
+		            this._validate(field);
+		        }
+		        if(![...document.getElementById(this.form).querySelectorAll('.invalid')].length){
+		           this.valid = true;
+		        }
+		    }
+		    _validate(field){
+		        if(this.patterns[field.name]){
+		            if(!this.patterns[field.name].test(field.value)){
+		               field.classList.add('invalid');
+		               this._addErrorMsg(field);
+		               this._watchField(field);
+		            }
+		        }
+		    }
+		    _addErrorMsg(field){
+		        let error = `<div class="${this.errorClass}">${this.errors[field.name]}</div> `;
+		        field.parentNode.insertAdjacentHTML('beforeend', error);
+		    }
+		    _watchField(field){
+		        field.addEventListener('input', () => {
+		            let error = field.parentNode.querySelector(`.${this.errorClass}`);
+		            if(this.patterns[field.name].test(field.value)){
+		                field.classList.remove('invalid');
+		                field.classList.add('valid');
+		                if(error){
+		                    error.remove();
+		                }
+		            } else {
+		                field.classList.remove('valid');
+		                field.classList.add('invalid');
+		                if(!error){
+		                    this._addErrorMsg(field);
+		                }
+		            }
+		        })
+		    }
+		}
+		window.onload = () => {
+	        document.getElementById('form').addEventListener('submit', e => {
+	            let valid = new Validator('form');
+	            if(!valid.valid){
+	                e.preventDefault();
+	            }
+	        })
+	    }
+
+	</script>
+</body>
+</html>
