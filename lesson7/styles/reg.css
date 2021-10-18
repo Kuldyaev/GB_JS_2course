@@ -1,0 +1,138 @@
+.top-conteiner{
+	background-color: #F1E4E6;
+	width: 100%;
+	height: 148px;
+	display: flex;
+}
+.top-conteiner-block{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+.top-conteiner-textblock{
+	height: 100%;
+	display: flex;
+	align-items: center;
+	font-family: "Lato-Regular";
+}
+.textblock1{
+	font-size: 24px;
+	line-height: 29px;
+	color: #F16D7F
+}
+.textblock2{
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 17px;
+	color: #636363;
+}
+.bottom-conteiner{
+	margin-top: 128px;
+}
+.main-conteiner-context{
+	display: flex;
+}
+.main-conteiner-context-item1{
+	width: 32%;
+}
+.main-conteiner-context-item2{
+	width: 68%;
+	padding: 64px 0px 10px 128px; 
+}
+.condition{
+	font-family: "Lato-Regular";
+	color: #000000;
+	font-weight: 300;
+	font-size: 24px;
+	line-height: 29px;
+}
+.condition-text{
+	margin-top: 22px;
+	margin-bottom: 22px;
+}
+.condition-listItem{
+	margin-bottom: 16px;
+}
+.condition-info{
+	font-weight: 300;
+	font-size: 13px;
+	line-height: 16px;
+	color: #B1B1B1;
+	letter-spacing: normal;
+	word-spacing: 2px;
+	margin-top: 15px;
+	margin-bottom: 39px;}
+ul{
+	margin-left: 30px;
+	list-style-position: outside;
+	list-style-image: url('../img/marker.svg');
+}
+li{
+	padding-left: 15px;
+}
+.joinBtn{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.catalog-button{
+	height:50px;
+	width: 167px;
+	border: 1px solid #FF6A6A;
+	
+	margin-top: 18px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 19px;
+	line-height: 17px;
+
+	background-color: #FF6A6A;
+	color: #FFFFFF;
+
+}
+.catalog-button:hover{
+	height: 50px;
+	width: 167px;
+	border: 1px solid #FF6A6A;
+	background-color: #FFFFFF;
+	color: #FF6A6A;
+	text-decoration: none;
+}
+.catalog-button-text{
+	text-decoration: none;
+	word-spacing: 2px;
+	margin-top: 10px;
+}
+input{
+	margin-top: 20px;
+}
+label{
+	margin-top: 30px;
+	font-family: "Lato-Regular";
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 19px;
+	color: #222222;
+	word-spacing: 2px;
+}
+.checkForm{
+	display: flex;
+	justify-items: center;
+	height: 20px;
+	margin-top: 30px;
+}
+.checkFormLabel{
+	margin: 4px 10px 0px 10px;
+	font-family: "Lato-Regular";
+	font-weight: 300;
+	font-size: 11px;
+	line-height: 13px;
+	color: #000000;
+}
+@font-face {
+	font-family: "Lato-Regular";  
+	src: url("../fonts/Lato-Regular.ttf") format("truetype"); 
+	font-style: normal; 
+	font-weight: normal;
+ }

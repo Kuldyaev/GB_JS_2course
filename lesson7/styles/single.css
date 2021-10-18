@@ -1,0 +1,254 @@
+.top-conteiner{
+	background-color: #F1E4E6;
+	width: 100%;
+	height: 148px;
+	display: flex;
+}
+.top-conteiner-block{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+.top-conteiner-textblock{
+	height: 100%;
+	display: flex;
+	align-items: center;
+	font-family: "Lato-Regular";
+}
+.textblock1{
+	font-size: 24px;
+	line-height: 29px;
+	color: #F16D7F
+}
+.textblock2{
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 17px;
+	color: #636363;
+}
+#textblock2-span{
+	color: #F16D7F;
+	font-weight: 700;
+}
+.bigImgBlock{
+	width: 100%;
+	height: 777px;
+	background-color: #F7F7F7;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.navBtns{
+	width: 47px;
+	height: 47px;
+	background-color: rgba(42, 42, 42, 0.15);
+
+	font-family: "Lato-Regular";
+	font-weight: 700;
+	font-size: 30px;
+	color: black;
+
+}
+.navBtnsLink{
+	text-decoration: none;
+	color: black;
+	display: block;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.navBtns:hover .navBtnsLink{
+	color:  #F16D7F;
+}
+.info-block{
+	height: 580px;
+	width: 360px;
+	background-color: #F8F8F8;
+}
+.info-block-context{
+	height: 160px;
+	width: 100%;
+}
+.info-block-context-title{
+	font-size: 13px;
+	line-height: 16px;
+	color: #000000;
+	margin-top: 25px;
+	margin-left: 18px;
+}
+.info-block-context-text{
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 17px;
+	color:  #5D5D5D;
+	margin-top: 12px;
+	margin-left: 18px;
+	margin-right: 29px;
+}
+.info-block-context-price{
+	font-size: 16px;
+	line-height: 19px;
+	color: #F16D7F;
+	margin-top: 18px;
+	margin-left: 18px;
+	margin-right: 29px;
+}
+
+.main-conteiner-context{
+	position: relative;
+	top: -65px;
+}
+
+.main-conteiner-block1{
+	grid-area: block1;
+	height: 600px;
+	background-color: #FFFFFF;
+	border: 1px solid #EAEAEA;
+	display: flex;
+	justify-content: center;
+}
+.offerBox{
+	height: 100%;
+	width: 641px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+hr{
+	width: 100%;
+	border-top: 1px solid  #EAEAEA;
+}
+.offerBoxTitle{
+	color: #F16D7F;
+	margin-top: 64px;
+	font-family: "Lato-Regular";
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 17px;
+}
+.horizontalLine{
+	margin-top: 12px;
+	background-color: #F16D7F;
+	width: 63px;
+	height: 3px;
+}
+.offerBoxName{
+	margin-top: 12px;
+	font-family: "Lato-Regular";
+	font-weight: 300;
+	font-size: 18px;
+	line-height: 22px;
+	color: #4D4D4D
+}
+.offerBoxDescription{
+	max-width: 560px;
+	margin-top: 48px;
+	font-family: "Lato-Regular";
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	color: #5E5E5E;
+}
+.offerBoxPrice{
+	margin-top: 32px;
+	font-family: "Lato-Regular";
+	font-weight: 300;
+	font-size: 24px;
+	line-height: 29px;
+	color: #EF5B70;
+}
+.horizontalLine2{
+	margin-top: 65px;
+	background-color: #EAEAEA;
+	width: 100%;
+	height: 1px;
+}
+.offerBoxButton{
+	margin-top: 49px;
+	border: 1px solid #FF6A6A;
+	width: 210px;
+	height: 46px;
+}
+.offerBoxButtonLink{
+	display: block;
+	height: 100%;
+	width: 100%;
+	text-decoration: none;
+}
+.offerBoxButtonContent{
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+	color: #FF6A6A;
+	font-family: "Lato-Regular";
+}
+.offerBoxButtonSVG{
+	margin-left: 23px;
+}
+.offerBoxButtonText{
+	margin-left: 18px;
+}
+.offerBoxButtonContent:hover {
+	background-color: #FF6A6A;
+	color:  #FFFFFF;
+}
+.offerBoxButtonContent:hover {
+	background-color: #FF6A6A;
+	color:  #FFFFFF;
+}
+.offerBoxButtonContent:hover  .offerBoxButtonSVG path{
+	fill: #FFFFFF;
+}
+.offerBoxParameters, .offerBoxParametersItem{
+	display: flex;
+	align-items: center;
+	font-family: "Lato-Regular";
+	font-size: 14px;
+	line-height: 17px;
+	color: #6F6E6E;
+}
+.offerBoxParameters{
+	margin-top: 65px;
+}
+.offerBoxParametersItem{
+	margin-right: 23px;
+}
+.triggerName{
+	margin-right: 9px;
+}
+.main-conteiner-block8{
+	grid-area: block8;
+	object-fit: contain;
+	position: relative;
+}
+.main-conteiner-block9{
+	grid-area: block9;
+	object-fit: contain;
+	position: relative;
+}
+.main-conteiner-block10{
+	grid-area: block10;
+	object-fit: contain;
+	position: relative;
+}
+.main-conteiner-context{
+	width: 100%;
+	display: grid;
+	grid-template-columns: 12fr 1fr 12fr 1fr 12fr ;
+	grid-template-rows: auto;
+	grid-row-gap: 129px;
+	grid-template-areas: 
+    " block1  block1  block1 block1 block1"
+    " block8    .     block9   .    block10";
+}
+@font-face {
+	font-family: "Lato-Regular";  
+	src: url("./fonts/Lato-Regular.ttf") format("truetype"); 
+	font-style: normal; 
+	font-weight: normal;
+ }
+	

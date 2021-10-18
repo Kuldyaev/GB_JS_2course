@@ -1,5 +1,5 @@
 Vue.component('cart',{
-    props: ['delete_product'],
+    props: ['cart','delete_product'],
 	data () {
 		return {
 		

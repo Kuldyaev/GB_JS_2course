@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eStore</title>
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+    <link href="styles/index.css" rel="stylesheet" type="text/css">
+</head>
+<body >
+    <div id="app" class="wrapper">
+        <topheader ref="myheader" :positions_in_cart="positions_in_cart" :is_visible_cart="isVisibleCart" :delete_product='deleteProduct' :changecartvisibility='changecartvisibility' :cart='cart'   :show_search_results='showSearchResults'></topheader>
+        <indexpage v-show="isVisibleIndexPage" :products_list_is_empty="products_list_is_empty" :products="products" :add_product='add_product'></indexpage>
+        <cartpage v-show="isVisibleCartPage"></cartpage>
+        <productpage v-show="isVisibleProductPage" :products="searchResult" :add_product='add_product' :hide_search_results="hideSearchResults"></productpage>   
+        <myfooter></myfooter>
+    </div>  
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/item.js"></script>
+    <script src="js/indexpage.js"></script>
+    <script src="js/cartpage.js"></script>
+    <script src="js/productpage.js"></script>
+    <script src="js/app.js"></script>
+    
+</body>
+</html>
